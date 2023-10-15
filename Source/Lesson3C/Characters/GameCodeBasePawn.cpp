@@ -4,7 +4,7 @@
 #include "GameCodeBasePawn.h"
 
 #include "Components/SphereComponent.h"
-#include "GameFramework/FloatingPawnMovement.h"
+#include "Lesson3C/Components/Movement/GCBasePawnMovementComponent.h"
 
 // Sets default values
 AGameCodeBasePawn::AGameCodeBasePawn()
@@ -14,7 +14,7 @@ AGameCodeBasePawn::AGameCodeBasePawn()
 	CollisionComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	RootComponent = CollisionComponent;
 
-	MovementComponent = CreateDefaultSubobject<UPawnMovementComponent, UFloatingPawnMovement>(TEXT("Movement component"));
+	MovementComponent = CreateDefaultSubobject<UPawnMovementComponent, UGCBasePawnMovementComponent>(TEXT("Movement component"));
 	MovementComponent->SetUpdatedComponent(CollisionComponent);
 }
 
