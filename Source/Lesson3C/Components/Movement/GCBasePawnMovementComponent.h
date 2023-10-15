@@ -16,7 +16,20 @@ class LESSON3C_API UGCBasePawnMovementComponent : public UPawnMovementComponent
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+public:
+	void JumpStart();
+
 protected:
 	UPROPERTY(EditAnywhere)
 	float MaxSpeed = 1200.0f;
+
+	UPROPERTY(EditAnywhere)
+	bool bEnableGravity;
+
+	UPROPERTY(EditAnywhere)
+	float InitialJumpVelocity = 500.0f;
+
+private:
+	FVector VerticalVelocity = FVector::ZeroVector;
+	bool bIsFalling = false;
 };

@@ -27,6 +27,8 @@ void AGameCodeBasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AGameCodeBasePawn::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGameCodeBasePawn::MoveRight);
+
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AGameCodeBasePawn::Jump);
 }
 
 void AGameCodeBasePawn::MoveForward(float Value)
@@ -43,5 +45,12 @@ void AGameCodeBasePawn::MoveRight(float Value)
 	{
 		AddMovementInput(GetActorRightVector(), Value);
 	}
+}
+
+void AGameCodeBasePawn::Jump()
+{
+	checkf(MovementComponent->IsA<UGCBasePawnMovementComponent>(), TEXT("AGameCodeBasePawn::Jump() Jump can work only with UGCBasePawnMovementComponent"));
+	UGCBasePawnMovementComponent* BaseMovement = StaticCast<UGCBasePawnMovementComponent*>(MovementComponent); 
+	BaseMovement->JumpStart();
 }
 
