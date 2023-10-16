@@ -4,6 +4,7 @@
 #include "GameCodeBasePawn.h"
 
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Lesson3C/Components/Movement/GCBasePawnMovementComponent.h"
 
 // Sets default values
@@ -16,6 +17,20 @@ AGameCodeBasePawn::AGameCodeBasePawn()
 
 	MovementComponent = CreateDefaultSubobject<UPawnMovementComponent, UGCBasePawnMovementComponent>(TEXT("Movement component"));
 	MovementComponent->SetUpdatedComponent(CollisionComponent);
+}
+
+void AGameCodeBasePawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	APlayerCameraManager* CameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
+	CurrentViewActor = CameraManager->GetViewTarget();
+	CameraManager->OnBlendComplete().AddUFunction(this, FName("OnBlendComplete"));
+}
+
+void AGameCodeBasePawn::OnBlendComplete()
+{
+	CurrentViewActor = GetController()->GetViewTarget();
 }
 
 // Called to bind functionality to input
@@ -35,7 +50,7 @@ void AGameCodeBasePawn::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
-		AddMovementInput(GetActorForwardVector(), Value);
+		AddMovementInput(CurrentViewActor->GetActorForwardVector(), Value);
 	}
 }
 
@@ -43,7 +58,7 @@ void AGameCodeBasePawn::MoveRight(float Value)
 {
 	if (Value != 0.0f)
 	{
-		AddMovementInput(GetActorRightVector(), Value);
+		AddMovementInput(CurrentViewActor->GetActorRightVector(), Value);
 	}
 }
 

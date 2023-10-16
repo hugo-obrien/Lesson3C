@@ -29,4 +29,13 @@ public:
 	void MoveRight(float Value);
 	void Jump();
 
+protected:
+	virtual void BeginPlay() override;
+
+private:
+	UFUNCTION()
+	void OnBlendComplete();
+
+	AActor* CurrentViewActor;
+
 };
