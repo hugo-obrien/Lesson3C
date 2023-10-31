@@ -5,6 +5,7 @@
 
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Lesson3C/Lesson3C.h"
 #include "Lesson3C/Components/Movement/GCBasePawnMovementComponent.h"
 
 // Sets default values
@@ -31,6 +32,8 @@ void AGameCodeBasePawn::BeginPlay()
 void AGameCodeBasePawn::OnBlendComplete()
 {
 	CurrentViewActor = GetController()->GetViewTarget();
+	// Logging example
+	UE_LOG(LogCameras, Log, TEXT("AGameCodeBasePawn::OnBlendComplete(): %s"), *CurrentViewActor->GetName());
 }
 
 // Called to bind functionality to input
