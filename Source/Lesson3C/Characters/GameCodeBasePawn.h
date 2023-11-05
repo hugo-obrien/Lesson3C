@@ -11,10 +11,13 @@ class LESSON3C_API AGameCodeBasePawn : public APawn
 {
 	GENERATED_BODY()
 
-public:
-	// Sets default values for this pawn's properties
-	AGameCodeBasePawn();
+private:
+	AActor* CurrentViewActor;
 
+	float InputForward = 0.0f;
+	float InputRight = 0.0f;
+
+public:
 	UPROPERTY(VisibleAnywhere)
 	class UPawnMovementComponent* MovementComponent;
 
@@ -22,20 +25,29 @@ public:
 	class USphereComponent* CollisionComponent;
 
 public:
+	// Sets default values for this pawn's properties
+	AGameCodeBasePawn();
+
+private:
+	UFUNCTION()
+	void OnBlendComplete();
+
+protected:
+	virtual void BeginPlay() override;
+
+public:
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	float GetInputForward() { return InputForward; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	float GetInputRight() { return InputRight; }
+	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void Jump();
-
-protected:
-	virtual void BeginPlay() override;
-
-private:
-	UFUNCTION()
-	void OnBlendComplete();
-
-	AActor* CurrentViewActor;
 
 };
