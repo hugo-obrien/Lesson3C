@@ -16,8 +16,11 @@ class LESSON3C_API UGCBasePawnMovementComponent : public UPawnMovementComponent
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
 public:
 	void JumpStart();
+
+	virtual bool IsFalling() const override;
 
 protected:
 	UPROPERTY(EditAnywhere)
