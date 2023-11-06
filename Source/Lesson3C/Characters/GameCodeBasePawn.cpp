@@ -3,7 +3,10 @@
 
 #include "GameCodeBasePawn.h"
 
+#include "Camera/CameraComponent.h"
+#include "Components/ArrowComponent.h"
 #include "Components/SphereComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Lesson3C/Lesson3C.h"
 #include "Lesson3C/Components/Movement/GCBasePawnMovementComponent.h"
@@ -12,18 +15,29 @@
 AGameCodeBasePawn::AGameCodeBasePawn()
 {
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
-	CollisionComponent->SetSphereRadius(50.0f);
+	CollisionComponent->SetSphereRadius(CollisionSphereRadius);
 	CollisionComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	RootComponent = CollisionComponent;
 
 	MovementComponent = CreateDefaultSubobject<UPawnMovementComponent, UGCBasePawnMovementComponent>(TEXT("Movement component"));
 	MovementComponent->SetUpdatedComponent(CollisionComponent);
+
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArmComponent->bUsePawnControlRotation = 1;
+	SpringArmComponent->SetupAttachment(RootComponent);
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	CameraComponent->SetupAttachment(SpringArmComponent);
+
+#if	WITH_EDITORONLY_DATA
+	ArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
+	ArrowComponent->SetupAttachment(RootComponent);
+#endif
 }
 
 void AGameCodeBasePawn::BeginPlay()
 {
 	Super::BeginPlay();
-
 	APlayerCameraManager* CameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0);
 	CurrentViewActor = CameraManager->GetViewTarget();
 	CameraManager->OnBlendComplete().AddUFunction(this, FName("OnBlendComplete"));
@@ -32,9 +46,10 @@ void AGameCodeBasePawn::BeginPlay()
 void AGameCodeBasePawn::OnBlendComplete()
 {
 	CurrentViewActor = GetController()->GetViewTarget();
-	// Logging example
-	UE_LOG(LogCameras, Log, TEXT("AGameCodeBasePawn::OnBlendComplete(): %s"), *CurrentViewActor->GetName());
+	UE_LOG(LogCameras, Verbose, TEXT("AGameCodeBasePawn::OnBlendComplete() Current view actor: %s"),
+		   *CurrentViewActor->GetName());
 }
+
 
 // Called to bind functionality to input
 void AGameCodeBasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

@@ -27,7 +27,7 @@ protected:
 	float MaxSpeed = 1200.0f;
 
 	UPROPERTY(EditAnywhere)
-	bool bEnableGravity;
+	bool bEnableGravity = true;
 
 	UPROPERTY(EditAnywhere)
 	float InitialJumpVelocity = 500.0f;
