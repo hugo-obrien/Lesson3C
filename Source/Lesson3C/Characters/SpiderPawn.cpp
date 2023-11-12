@@ -7,7 +7,6 @@
 
 ASpiderPawn::ASpiderPawn()
 {
-	UE_LOG(LogTemp, Log, TEXT("ASpiderPawn::ASpiderPawn() - SpiderPawn constructor called"))
 	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Spider mesh"));
 	SkeletalMeshComponent->SetupAttachment(RootComponent);
 
@@ -22,9 +21,6 @@ void ASpiderPawn::Tick(float DeltaSeconds)
 	IKLeftFrontFootOffset = FMath::FInterpTo(IKLeftFrontFootOffset, GetIKOffsetForSocket(LeftFrontFootSocketName), DeltaSeconds, IKInterpSpeed);
 	IKRightRearFootOffset = FMath::FInterpTo(IKRightRearFootOffset, GetIKOffsetForSocket(RightRearFootSocketName), DeltaSeconds, IKInterpSpeed);
 	IKLeftRearFootOffset = FMath::FInterpTo(IKLeftRearFootOffset, GetIKOffsetForSocket(LeftRearFootSocketName), DeltaSeconds, IKInterpSpeed);
-	/*IKLeftFrontFootOffset = GetIKOffsetForSocket(LeftFrontFootSocketName);
-	IKRightRearFootOffset = GetIKOffsetForSocket(RightRearFootSocketName);
-	IKLeftRearFootOffset = GetIKOffsetForSocket(LeftRearFootSocketName);*/
 }
 
 float ASpiderPawn::GetIKOffsetForSocket(const FName& SocketName)
