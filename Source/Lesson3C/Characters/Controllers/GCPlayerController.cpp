@@ -18,6 +18,10 @@ void AGCPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("MoveRight", this, &AGCPlayerController::MoveRight);
 	InputComponent->BindAxis("Turn", this, &AGCPlayerController::Turn);
 	InputComponent->BindAxis("LookUp", this, &AGCPlayerController::LookUp);
+
+	InputComponent->BindAxis("TurnAtRate", this, &AGCPlayerController::TurnAtRate);
+	InputComponent->BindAxis("LookUpAtRate", this, &AGCPlayerController::LookUpAtRate);
+
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AGCPlayerController::Jump);
 }
 
@@ -50,6 +54,22 @@ void AGCPlayerController::LookUp(float Value)
 	if (CachedBaseCharacter.IsValid())
 	{
 		CachedBaseCharacter->LookUp(Value);
+	}
+}
+
+void AGCPlayerController::TurnAtRate(float Value)
+{
+	if (CachedBaseCharacter.IsValid())
+	{
+		CachedBaseCharacter->TurnAtRate(Value);
+	}
+}
+
+void AGCPlayerController::LookUpAtRate(float Value)
+{
+	if (CachedBaseCharacter.IsValid())
+	{
+		CachedBaseCharacter->LookUpAtRate(Value);
 	}
 }
 

@@ -57,3 +57,13 @@ void APlayerCharacter::LookUp(float Value)
 	AddControllerPitchInput(Value);
 }
 
+void APlayerCharacter::TurnAtRate(float Value)
+{
+	AddControllerYawInput(Value * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+}
+
+void APlayerCharacter::LookUpAtRate(float Value)
+{
+	AddControllerPitchInput(Value * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+}
+
