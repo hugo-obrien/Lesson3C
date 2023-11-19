@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class LESSON3C_API APlayerCharacter : public AGCBaseCharacter
 {
 	GENERATED_BODY()
