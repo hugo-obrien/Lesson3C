@@ -32,4 +32,7 @@ private:
 	void LookUpAtRate(float Value);
 
 	void Jump();
+
+	void StartSprint();
+	void StopSprint();
 };
