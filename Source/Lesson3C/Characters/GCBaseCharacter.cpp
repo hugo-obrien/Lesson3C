@@ -23,6 +23,17 @@ void AGCBaseCharacter::Tick(float DeltaSeconds)
 	}
 }
 
+void AGCBaseCharacter::ChangeCrouchState()
+{
+	if (GetCharacterMovement()->IsCrouching())
+	{
+		UnCrouch();
+	} else
+	{
+		Crouch();
+	}
+}
+
 void AGCBaseCharacter::StartSprint()
 {
 	bIsSprintRequested = true;

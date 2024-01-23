@@ -33,6 +33,8 @@ private:
 
 	void Jump();
 
+	void ChangeCrouchState();
+
 	void StartSprint();
 	void StopSprint();
 };

@@ -20,6 +20,8 @@ public:
 	virtual void TurnAtRate(float Value) {};
 	virtual void LookUpAtRate(float Value) {};
 
+	virtual void ChangeCrouchState();
+
 	virtual void StartSprint();
 	virtual void StopSprint();
 
