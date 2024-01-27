@@ -5,6 +5,7 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Lesson3C/Characters/GCBaseCharacter.h"
+#include "Lesson3C/Components/Movement/GCBaseCharacterMovementComponent.h"
 
 void UGCBaseCharacterAnimInstance::NativeBeginPlay()
 {
@@ -21,11 +22,10 @@ void UGCBaseCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		return;
 	}
 
-	UCharacterMovementComponent* CharacterMovement = CachedBaseCharacter->GetCharacterMovement();
+	UGCBaseCharacterMovementComponent* CharacterMovement = CachedBaseCharacter->GetBaseCharacterMovementComponent();
 
 	Speed = CharacterMovement->Velocity.Size();
 	bIsFalling = CharacterMovement->IsFalling();
 	bIsCrouching = CharacterMovement->IsCrouching();
-
-	bIsSprinting = CachedBaseCharacter->GetIsSprinting();
+	bIsSprinting = CharacterMovement->IsSprinting();
 }

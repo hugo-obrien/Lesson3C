@@ -6,12 +6,15 @@
 #include "GameFramework/Character.h"
 #include "GCBaseCharacter.generated.h"
 
+class UGCBaseCharacterMovementComponent;
 UCLASS(Abstract, NotBlueprintable)
 class LESSON3C_API AGCBaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
+	AGCBaseCharacter(const FObjectInitializer& ObjectInitializer);
+	
 	virtual void MoveForward(float Value) {};
 	virtual void MoveRight(float Value) {};
 	virtual void Turn(float Value) {};
@@ -24,10 +27,11 @@ public:
 
 	virtual void StartSprint();
 	virtual void StopSprint();
-
+	
 	virtual void Tick(float DeltaSeconds) override;
+	void TryChangeSprintState();
 
-	FORCEINLINE bool GetIsSprinting() {return bIsSprinting;}
+	FORCEINLINE UGCBaseCharacterMovementComponent* GetBaseCharacterMovementComponent() {return GCBaseCharacterMovementComponent;}
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character | Controls")
@@ -40,8 +44,16 @@ protected:
 
 	virtual bool CanSprint();
 
+	UGCBaseCharacterMovementComponent* GCBaseCharacterMovementComponent;
+
+	UFUNCTION(BlueprintNativeEvent, Category= "Character | Movement")
+	void OnSprintStart();
+	virtual void OnSprintStart_Implementation();
+	
+	UFUNCTION(BlueprintNativeEvent, Category= "Character | Movement")
+	void OnSprintEnd();
+	virtual void OnSprintEnd_Implementation();
+
 private:
-	float DefaultMaxMovementSpeed = 0.0f;
 	bool bIsSprintRequested = false;
-	bool bIsSprinting = false;
 };

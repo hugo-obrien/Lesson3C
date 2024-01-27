@@ -7,12 +7,14 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
-APlayerCharacter::APlayerCharacter()
+APlayerCharacter::APlayerCharacter(const FObjectInitializer& ObjectInitializer) :
+	Super(ObjectInitializer)
 {
+	
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-	
+
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring arm"));
 	SpringArmComponent->SetupAttachment(RootComponent);
 	SpringArmComponent->bUsePawnControlRotation = true;
@@ -90,5 +92,17 @@ void APlayerCharacter::OnJumped_Implementation()
 	{
 		UnCrouch();
 	}
+}
+
+void APlayerCharacter::OnSprintStart_Implementation()
+{
+	Super::OnSprintStart_Implementation();
+	UE_LOG(LogTemp, Warning, TEXT("APlayerCharacter::OnSprintStart_Implementation"))
+}
+
+void APlayerCharacter::OnSprintEnd_Implementation()
+{
+	Super::OnSprintEnd_Implementation();
+	UE_LOG(LogTemp, Warning, TEXT("APlayerCharacter::OnSprintEnd_Implementation"))
 }
 
