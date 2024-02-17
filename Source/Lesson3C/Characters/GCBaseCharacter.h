@@ -46,14 +46,6 @@ protected:
 
 	UGCBaseCharacterMovementComponent* GCBaseCharacterMovementComponent;
 
-	UFUNCTION(BlueprintNativeEvent, Category= "Character | Movement")
-	void OnSprintStart();
-	virtual void OnSprintStart_Implementation();
-	
-	UFUNCTION(BlueprintNativeEvent, Category= "Character | Movement")
-	void OnSprintEnd();
-	virtual void OnSprintEnd_Implementation();
-
 private:
 	bool bIsSprintRequested = false;
 };

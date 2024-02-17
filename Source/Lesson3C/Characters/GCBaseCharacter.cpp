@@ -24,13 +24,11 @@ void AGCBaseCharacter::TryChangeSprintState()
 	if (bIsSprintRequested && !GCBaseCharacterMovementComponent->IsSprinting() && CanSprint())
 	{
 		GCBaseCharacterMovementComponent->StartSprint();
-		OnSprintStart();
 	}
 
 	if (!bIsSprintRequested && GCBaseCharacterMovementComponent->IsSprinting())
 	{
 		GCBaseCharacterMovementComponent->StopSprint();
-		OnSprintEnd();
 	}
 }
 
@@ -62,14 +60,4 @@ void AGCBaseCharacter::StopSprint()
 bool AGCBaseCharacter::CanSprint()
 {
 	return true;
-}
-
-void AGCBaseCharacter::OnSprintStart_Implementation()
-{
-	UE_LOG(LogTemp, Log, TEXT("AGCBaseCharacter::OnSprintStart_Implementation"))
-}
-
-void AGCBaseCharacter::OnSprintEnd_Implementation()
-{
-	UE_LOG(LogTemp, Log, TEXT("AGCBaseCharacter::OnSprintEnd_Implementation"))
 }

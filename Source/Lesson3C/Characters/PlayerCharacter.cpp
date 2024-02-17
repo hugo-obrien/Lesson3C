@@ -94,15 +94,39 @@ void APlayerCharacter::OnJumped_Implementation()
 	}
 }
 
-void APlayerCharacter::OnSprintStart_Implementation()
+void APlayerCharacter::StartSprint()
 {
-	Super::OnSprintStart_Implementation();
-	UE_LOG(LogTemp, Warning, TEXT("APlayerCharacter::OnSprintStart_Implementation"))
+	Super::StartSprint();
+	BeginSprintCamera();
 }
 
-void APlayerCharacter::OnSprintEnd_Implementation()
+void APlayerCharacter::StopSprint()
 {
-	Super::OnSprintEnd_Implementation();
-	UE_LOG(LogTemp, Warning, TEXT("APlayerCharacter::OnSprintEnd_Implementation"))
+	Super::StopSprint();
+	EndSprintCamera();
+}
+
+void APlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	if (IsValid(SprintCurve))
+	{
+		FOnTimelineFloat SprintTimelineCallback;
+		SprintTimelineCallback.BindUFunction(this, FName("UpdateSprintCamera"));
+		SprintCameraTimeline.AddInterpFloat(SprintCurve, SprintTimelineCallback);
+	}
+
+	DefaultSpringArmLength = SpringArmComponent->TargetArmLength;
+}
+
+void APlayerCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	SprintCameraTimeline.TickTimeline(DeltaSeconds);
+}
+
+void APlayerCharacter::UpdateSprintCamera(float Value) const
+{
+	SpringArmComponent->TargetArmLength = FMath::Lerp(DefaultSpringArmLength, SprintSpringArmLength, Value);
 }
 
