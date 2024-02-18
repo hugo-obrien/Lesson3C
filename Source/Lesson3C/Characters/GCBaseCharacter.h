@@ -33,6 +33,11 @@ public:
 
 	FORCEINLINE UGCBaseCharacterMovementComponent* GetBaseCharacterMovementComponent() {return GCBaseCharacterMovementComponent;}
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FORCEINLINE float GetIKRightFootOffset() const { return IKRightFootOffset; }
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FORCEINLINE float GetIKLeftFootOffset() const { return IKLeftFootOffset; }
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character | Controls")
 	float BaseTurnRate = 45.0f;
@@ -46,6 +51,14 @@ protected:
 
 	UGCBaseCharacterMovementComponent* GCBaseCharacterMovementComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character | IK Settings")
+	FName RightFootSocketName;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character | IK Settings")
+	FName LeftFootSocketName;
+
 private:
 	bool bIsSprintRequested = false;
+
+	float IKRightFootOffset = 0.0f;
+	float IKLeftFootOffset = 0.0f;
 };
