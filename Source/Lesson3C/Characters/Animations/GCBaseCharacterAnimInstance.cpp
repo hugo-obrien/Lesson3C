@@ -10,7 +10,8 @@
 void UGCBaseCharacterAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
-	checkf(TryGetPawnOwner()->IsA<AGCBaseCharacter>(), TEXT("UGCBaseCharacterAnimInstance::NativeBeginPlay() UGCBaseCharacterAnimInstance can be used only with AGCBaseCharacter"));
+	checkf(TryGetPawnOwner()->IsA<AGCBaseCharacter>(),
+		TEXT("UGCBaseCharacterAnimInstance::NativeBeginPlay() UGCBaseCharacterAnimInstance can be used only with AGCBaseCharacter"));
 	CachedBaseCharacter = StaticCast<AGCBaseCharacter*>(TryGetPawnOwner());
 }
 
@@ -28,4 +29,7 @@ void UGCBaseCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	bIsFalling = CharacterMovement->IsFalling();
 	bIsCrouching = CharacterMovement->IsCrouching();
 	bIsSprinting = CharacterMovement->IsSprinting();
+
+	RightFootEffectorLocation = FVector(CachedBaseCharacter->GetIKRightFootOffset(),0.0f, 0.0f);
+	LeftFootEffectorLocation = FVector(-CachedBaseCharacter->GetIKLeftFootOffset(),0.0f, 0.0f);
 }

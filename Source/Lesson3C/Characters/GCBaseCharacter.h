@@ -55,10 +55,20 @@ protected:
 	FName RightFootSocketName;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Character | IK Settings")
 	FName LeftFootSocketName;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character | IK Settings", meta=(ClampMin=0.0f, UIMin=0.0f))
+	float IKTraceExtendDistance = 50.0f;
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Character | IK Settings", meta=(ClampMin=0.0f, UIMin=0.0f))
+	float IKInterpSpeed = 20.0f;
 
 private:
 	bool bIsSprintRequested = false;
 
 	float IKRightFootOffset = 0.0f;
 	float IKLeftFootOffset = 0.0f;
+
+	float IKTraceDistance = 45.0f;
+	float IKScale = 1.0f;
+
+	float GetIKOffsetForASocket(const FName& SocketName);
 };
