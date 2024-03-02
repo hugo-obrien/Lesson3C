@@ -14,6 +14,9 @@ class LESSON3C_API AGCBaseCharacter : public ACharacter
 
 public:
 	AGCBaseCharacter(const FObjectInitializer& ObjectInitializer);
+
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 	
 	virtual void MoveForward(float Value) {};
 	virtual void MoveRight(float Value) {};
@@ -28,7 +31,6 @@ public:
 	virtual void StartSprint();
 	virtual void StopSprint();
 	
-	virtual void Tick(float DeltaSeconds) override;
 	void TryChangeSprintState();
 
 	FORCEINLINE UGCBaseCharacterMovementComponent* GetBaseCharacterMovementComponent() {return GCBaseCharacterMovementComponent;}
@@ -44,8 +46,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character | Controls")
 	float BaseLookUpRate = 45.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character | Movement")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character | Movement | Sprint")
 	float SprintSpeed = 800.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character | Movement | Sprint", meta=(ClampMin=0.0f, UIMin=0.0f))
+	float MaxStamina = 100.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character | Movement | Sprint", meta=(ClampMin=0.0f, UIMin=0.0f))
+	float StaminaRestoreRate = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character | Movement | Sprint", meta=(ClampMin=0.0f, UIMin=0.0f))
+	float SprintStaminaConsumptionRate = 10.0f;
 
 	virtual bool CanSprint();
 
@@ -71,4 +79,11 @@ private:
 	float IKScale = 1.0f;
 
 	float GetIKOffsetForASocket(const FName& SocketName);
+
+	float CurrentStamina = 0.0f;
+
+	bool bIsOutOfStamina = false;
+
+	void RestoreStamina(float DeltaSeconds);
+	void SprintConsumeStamina(float DeltaSeconds);
 };

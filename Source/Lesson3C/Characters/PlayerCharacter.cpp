@@ -96,6 +96,7 @@ void APlayerCharacter::OnJumped_Implementation()
 
 void APlayerCharacter::StartSprint()
 {
+	// TODO пофиксить камеру при недостатке выносливости
 	Super::StartSprint();
 	BeginSprintCamera();
 }

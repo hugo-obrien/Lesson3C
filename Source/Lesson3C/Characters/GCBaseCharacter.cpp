@@ -20,6 +20,12 @@ AGCBaseCharacter::AGCBaseCharacter(const FObjectInitializer& ObjectInitializer)
 	UE_LOG(LogTemp, Log, TEXT("Scale %f, unscaled %f, scaled %f"), IKScale, UnscaledCapsuleHalfHeight, IKTraceDistance);
 }
 
+void AGCBaseCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	CurrentStamina = MaxStamina;
+}
+
 void AGCBaseCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -28,16 +34,33 @@ void AGCBaseCharacter::Tick(float DeltaSeconds)
 	IKLeftFootOffset = FMath::FInterpTo(IKLeftFootOffset, GetIKOffsetForASocket(LeftFootSocketName), DeltaSeconds, IKInterpSpeed);
 	
 	TryChangeSprintState();
+
+	// const FString OnScreenString = FString::Printf(TEXT("%s\n\tState %s [%i]\n\t%s\n\tBlending %i On-Demand %i"), *Actor->GetName(), *StateEnum->GetDisplayNameTextByValue(ActorData.CurrentState).ToString(), ActorData.PermutationIndex, *StateEnum->GetDisplayNameTextByValue(ActorData.PreviousState).ToString(), ActorData.bBlending, ActorData.bRunningOnDemand);
+	// GEngine->AddOnScreenDebugMessage((uint64)-1, 2.0f, FColor::Emerald, Message.ToString());
+
+	const FString StaminaDebugString = FString::Printf(TEXT("Current stamina: %f"), CurrentStamina);
+	GEngine->AddOnScreenDebugMessage(-1, 0.05f, FColor::White, StaminaDebugString);
+	
+	if (!GCBaseCharacterMovementComponent->IsSprinting())
+	{
+		RestoreStamina(DeltaSeconds);
+	} else
+	{
+		SprintConsumeStamina(DeltaSeconds);
+	}
 }
 
 void AGCBaseCharacter::TryChangeSprintState()
 {
 	if (bIsSprintRequested && !GCBaseCharacterMovementComponent->IsSprinting() && CanSprint())
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Emerald, "Successfully try change state");
 		GCBaseCharacterMovementComponent->StartSprint();
 	}
 
-	if (!bIsSprintRequested && GCBaseCharacterMovementComponent->IsSprinting())
+	if (
+		(!bIsSprintRequested || FMath::IsNearlyZero(CurrentStamina, 0.01f))
+		&& GCBaseCharacterMovementComponent->IsSprinting())
 	{
 		GCBaseCharacterMovementComponent->StopSprint();
 	}
@@ -56,6 +79,9 @@ void AGCBaseCharacter::ChangeCrouchState()
 
 void AGCBaseCharacter::StartSprint()
 {
+	//const FString StaminaDebugString = FString::Printf(TEXT("Current stamina: %f"), CurrentStamina);
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Green, "Start sprint");
+	
 	bIsSprintRequested = true;
 	if (bIsCrouched)
 	{
@@ -70,6 +96,11 @@ void AGCBaseCharacter::StopSprint()
 
 bool AGCBaseCharacter::CanSprint()
 {
+	if (bIsOutOfStamina)
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -97,4 +128,31 @@ float AGCBaseCharacter::GetIKOffsetForASocket(const FName& SocketName)
 	}
 	
 	return Result;
+}
+
+void AGCBaseCharacter::RestoreStamina(float DeltaSeconds)
+{
+	if (CurrentStamina < MaxStamina)
+	{
+		CurrentStamina += StaminaRestoreRate * DeltaSeconds;
+		CurrentStamina = FMath::Clamp(CurrentStamina, 0.0f, MaxStamina);
+		if (FMath::IsNearlyEqual(CurrentStamina, MaxStamina, 0.01f))
+		{
+			bIsOutOfStamina = false;
+		}
+	}
+}
+
+void AGCBaseCharacter::SprintConsumeStamina(float DeltaSeconds)
+{
+	if (CurrentStamina > 0.0f)
+	{
+		CurrentStamina -= SprintStaminaConsumptionRate * DeltaSeconds;
+		CurrentStamina = FMath::Clamp(CurrentStamina, 0.0f, MaxStamina);
+		if (FMath::IsNearlyZero(CurrentStamina, 0.01f))
+		{
+			StopSprint();
+			bIsOutOfStamina = true;
+		}
+	}
 }
