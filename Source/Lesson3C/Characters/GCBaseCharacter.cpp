@@ -96,7 +96,7 @@ void AGCBaseCharacter::StopSprint()
 
 bool AGCBaseCharacter::CanSprint()
 {
-	if (bIsOutOfStamina)
+	if (GCBaseCharacterMovementComponent->IsOutOfStamina())
 	{
 		return false;
 	}
@@ -138,7 +138,7 @@ void AGCBaseCharacter::RestoreStamina(float DeltaSeconds)
 		CurrentStamina = FMath::Clamp(CurrentStamina, 0.0f, MaxStamina);
 		if (FMath::IsNearlyEqual(CurrentStamina, MaxStamina, 0.01f))
 		{
-			bIsOutOfStamina = false;
+			GCBaseCharacterMovementComponent->SetIsOutOfStamina(false);
 		}
 	}
 }
@@ -152,7 +152,7 @@ void AGCBaseCharacter::SprintConsumeStamina(float DeltaSeconds)
 		if (FMath::IsNearlyZero(CurrentStamina, 0.01f))
 		{
 			StopSprint();
-			bIsOutOfStamina = true;
+			GCBaseCharacterMovementComponent->SetIsOutOfStamina(true);
 		}
 	}
 }

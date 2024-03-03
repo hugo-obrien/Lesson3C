@@ -5,12 +5,9 @@
 
 float UGCBaseCharacterMovementComponent::GetMaxSpeed() const
 {
-	float Result = Super::GetMaxSpeed();
-	if (bIsSprinting)
-	{
-		Result = SprintSpeed;
-	}
-	return Result;
+	if (bIsSprinting) return SprintSpeed;
+	if (bIsOutOfStamina) return OutOfStaminaSpeed;
+	return Super::GetMaxSpeed();
 }
 
 void UGCBaseCharacterMovementComponent::StartSprint()
@@ -23,4 +20,9 @@ void UGCBaseCharacterMovementComponent::StopSprint()
 {
 	bIsSprinting = false;
 	bForceMaxAccel = 0;
+}
+
+void UGCBaseCharacterMovementComponent::SetIsOutOfStamina(bool bIsOutOfStamina_In)
+{
+	bIsOutOfStamina = bIsOutOfStamina_In;
 }

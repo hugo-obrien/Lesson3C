@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Lesson3C/Components/Movement/GCBaseCharacterMovementComponent.h"
 
 APlayerCharacter::APlayerCharacter(const FObjectInitializer& ObjectInitializer) :
 	Super(ObjectInitializer)
@@ -83,7 +84,11 @@ void APlayerCharacter::OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeigh
 
 bool APlayerCharacter::CanJumpInternal_Implementation() const
 {
-	return bIsCrouched || Super::CanJumpInternal_Implementation();
+	if (!GCBaseCharacterMovementComponent->IsOutOfStamina())
+	{
+		return bIsCrouched || Super::CanJumpInternal_Implementation();
+	}
+	return false;
 }
 
 void APlayerCharacter::OnJumped_Implementation()
@@ -96,9 +101,11 @@ void APlayerCharacter::OnJumped_Implementation()
 
 void APlayerCharacter::StartSprint()
 {
-	// TODO пофиксить камеру при недостатке выносливости
 	Super::StartSprint();
-	BeginSprintCamera();
+	if (!GCBaseCharacterMovementComponent->IsOutOfStamina())
+	{
+		BeginSprintCamera();
+	}
 }
 
 void APlayerCharacter::StopSprint()

@@ -24,12 +24,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Character animation")
 	bool bIsFalling = false;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Character animation")
 	bool bIsCrouching= false;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Character animation")
 	bool bIsSprinting = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category= "Character animation")
+	bool bIsOutOfStamina = false;
+	
 
 	UPROPERTY(VisibleAnywhere, Transient, BlueprintReadOnly, Category= "Character animation | IK Settings")
 	FVector RightFootEffectorLocation = FVector::ZeroVector;

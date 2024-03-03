@@ -22,10 +22,17 @@ public:
 	void StartSprint();
 	void StopSprint();
 
+	FORCEINLINE bool IsOutOfStamina() const {return bIsOutOfStamina;}
+
+	void SetIsOutOfStamina(bool bIsOutOfStamina_In);
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character movement: sprint", meta=(ClampMin = 0.0f, UIMin = 0.0f))
 	float SprintSpeed = 1200.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character movement: Sprint", meta=(ClampMin = 0.0f, UIMin = 0.0f))
+	float OutOfStaminaSpeed = 200.0f;
 
 private:
 	bool bIsSprinting;
+	bool bIsOutOfStamina;
 };
